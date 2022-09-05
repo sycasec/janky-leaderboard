@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime
-import os 
+import os
 
 ape_key = "NjMxNDRmOWI1MGQ0OTQ3N2NlY2UxN2QyLnlXbGQ1MHU2M1hJR3lKdTU1aVFtZHUxMEJoVHVUdTlX"
 base_url = "https://api.monkeytype.com"
@@ -36,6 +36,7 @@ def read_from_file():
 	with open("leaderboard.txt", "r") as f:
 		for line in f:
 			data = line.split("##")
+			# print(data)
 			lb[data[0]] = {'wpm': data[1], 'raw': data[2], 'acc': data[3], 'ts': data[4].strip('\n')}
 
 	return lb
@@ -52,19 +53,21 @@ def get_score():
 	return [wpm, raw_wpm, acc, ts]
 
 def get_wpm(item):
-	return item[1]['wpm']
+	return float(item[1]['wpm'])
 
 def display_leaderboard():
 	lb = read_from_file()
-	print(f"\t-----------------------------------------------------------------")
-	print(f"\t|  name     |   wpm      raw       acc            time          ")
+	print(f"\t--------------------------------------------------------------------")
+	print(f"\t#|  name     |   wpm      raw       acc            time          ")
+	rank = 1
 	for entry in sorted(lb.items(), key=get_wpm, reverse=True):
 		name = entry[0]
 		wpm = entry[1]['wpm']
 		raw = entry[1]['raw']
 		acc = entry[1]['acc']
 		ts = datetime.fromtimestamp(int(entry[1]['ts'])/1000)
-		print(f"\t|  {name}     :   {wpm}   {raw}   {acc}%   {ts}")
+		print(f"\t{rank}|  {name}     :   {wpm}   {raw}   {acc}%   {ts}")
+		rank = rank + 1
 	print(f"\t-----------------------------------------------------------------")
 
 def show_help():
