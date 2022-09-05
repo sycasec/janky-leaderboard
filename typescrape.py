@@ -27,19 +27,21 @@ def reinit_lb():
 	if os.path.isfile(file_path):
 	 	os.remove(file_path)
 
-def save_to_file(name, wpm, raw, acc, ts):
-	with open("leaderboard.txt", "a") as f:
-		f.write(str(name) + "##" + wpm + "##" + raw + "##" + acc + "##" + ts +'\n')
 
 def read_from_file():
 	lb = {}
 	with open("leaderboard.txt", "r") as f:
 		for line in f:
 			data = line.split("##")
-			# print(data)
+			if (data[0] in lb.keys()) and (data[1] < lb[data[0]]['wpm']):
+					continue
 			lb[data[0]] = {'wpm': data[1], 'raw': data[2], 'acc': data[3], 'ts': data[4].strip('\n')}
 
 	return lb
+
+def save_to_file(name, wpm, raw, acc, ts):
+	with open("leaderboard.txt", "a+") as f:
+		f.write(str(name) + "##" + wpm + "##" + raw + "##" + acc + "##" + ts +'\n')
 
 def get_score():
 	with requests.Session() as s:
@@ -57,18 +59,24 @@ def get_wpm(item):
 
 def display_leaderboard():
 	lb = read_from_file()
-	print(f"\t--------------------------------------------------------------------")
-	print(f"\t#|  name     |   wpm      raw       acc            time          ")
+	print(f"\t------------------------------------------------------------------------")
+	print(f"\t rank |  name     |   wpm      raw       acc            time          ")
 	rank = 1
+	ws = '  '
 	for entry in sorted(lb.items(), key=get_wpm, reverse=True):
 		name = entry[0]
-		wpm = entry[1]['wpm']
-		raw = entry[1]['raw']
-		acc = entry[1]['acc']
+		if len(name) < 6:
+			name += "_" * (6 - len(name))
+		elif len(name) > 6:
+			name = name[:6]
+		wpm = float(entry[1]['wpm'])
+		raw = float(entry[1]['raw'])
+		acc = float(entry[1]['acc'])
 		ts = datetime.fromtimestamp(int(entry[1]['ts'])/1000)
-		print(f"\t{rank}|  {name}     :   {wpm}   {raw}   {acc}%   {ts}")
+		if rank >= 10: ws = ' '
+		print(f"\t  {rank} {ws}|  {name}   :   {wpm:.2f}{' '*3 if wpm > 99.99 else ' '*4}{raw:.2f}{' '*3 if raw > 99.99 else ' '*4}{acc:.2f}%{' '*3 if acc < 100 else '  '}{ts}")
 		rank = rank + 1
-	print(f"\t-----------------------------------------------------------------")
+	print(f"\t------------------------------------------------------------------------")
 
 def show_help():
 	print("monkeytype janky leaderboard\n - type with 15 seconds first, then enter 'player PLAYER_NAME' to store score")
@@ -76,17 +84,17 @@ def show_help():
 	print("\n -- IMPORTANT !!! --\n do not exit before saving your score! loss of data is not the problem of csg :D")
 
 def main():
-	print(" -- Janky Monkeytype Terminal Leaderboard [JMTL] --\n - type 'player PLAYER_NAME' to save your score!\n - name must be of 4 characters!! >:(")
+	print(" -- Janky Monkeytype Terminal Leaderboard [JMTL] --\n - type 'player PLAYER_NAME' to save your score!\n\n --- UPDATE!!!! ---\n4 character limit is lifted!!")
+	print("\n - you can now type in a max of 15 chars for name,\nbut display is limited to 6")
 
 	while(True):
 		arg = input("Enter command\n> ")
 		comm = parse_args(arg)
 		if comm == 1:
 			name = arg.split(" ")[1]
-			if len(name) != 4:
-				print("\nmust be 4 chars only!!! >:(\n")
+			if len(name) > 15:
+				print("\nthat name is too long!")
 				continue
-
 			data = get_score()
 			data = [str(item) for item in data]
 			save_to_file(name, data[0], data[1], data[2], data[3])
