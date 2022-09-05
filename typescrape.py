@@ -33,7 +33,7 @@ def read_from_file():
 	with open("leaderboard.txt", "r") as f:
 		for line in f:
 			data = line.split("##")
-			if (data[0] in lb.keys()) and (data[1] < lb[data[0]]['wpm']):
+			if (data[0] in lb.keys()) and (float(data[1]) < float(lb[data[0]]['wpm'])):
 					continue
 			lb[data[0]] = {'wpm': data[1], 'raw': data[2], 'acc': data[3], 'ts': data[4].strip('\n')}
 
