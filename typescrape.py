@@ -59,8 +59,8 @@ def get_wpm(item):
 
 def display_leaderboard():
 	lb = read_from_file()
-	print(f"\t------------------------------------------------------------------------")
-	print(f"\t rank |  name     |   wpm      raw       acc            time          ")
+	print(f"\t----------------------------  LEADERBOARD  ----------------------------")
+	print(f"\t|rank |  name      |    wpm      raw      acc           time          |")
 	rank = 1
 	ws = '  '
 	for entry in sorted(lb.items(), key=get_wpm, reverse=True):
@@ -75,9 +75,9 @@ def display_leaderboard():
 		acc = float(entry[1]['acc'])
 		ts = datetime.fromtimestamp(int(entry[1]['ts'])/1000)
 		if rank >= 10: ws = ' '
-		print(f"\t  {rank} {ws}|  {name}   :   {wpm:.2f}{' '*3 if wpm > 99.99 else ' '*4}{raw:.2f}{' '*3 if raw > 99.99 else ' '*4}{acc:.2f}%{' '*3 if acc < 100 else '  '}{ts}")
+		print(f"\t| {rank} {ws}|  {name}   :   {wpm:.2f}{' '*3 if wpm > 99.99 else ' '*4}{raw:.2f}{' '*3 if raw > 99.99 else ' '*4}{acc:.2f}%{' '*3 if acc < 100 else '  '}{ts} |")
 		rank = rank + 1
-	print(f"\t------------------------------------------------------------------------")
+	print(f"\t-----------------------------------------------------------------------")
 
 def show_help():
 	print("monkeytype janky leaderboard\n - type with 15 seconds first, then enter 'player PLAYER_NAME' to store score")
@@ -85,8 +85,8 @@ def show_help():
 	print("\n -- IMPORTANT !!! --\n do not exit before saving your score! loss of data is not the problem of csg :D")
 
 def main():
-	print(" -- Janky Monkeytype Terminal Leaderboard [JMTL] --\n - type 'player PLAYER_NAME' to save your score!\n\n --- UPDATE!!!! ---\n4 character limit is lifted!!")
-	print("\n - you can now type in a max of 15 chars for name,\nbut display is limited to 6")
+	print(f"\n\n\n\n-- Janky Monkeytype Terminal Leaderboard [JMTL] --\n - type 'player PLAYER_NAME' to save your score!\n\n\t\t\t{' '*5}--- UPDATE!!!! ---\n\t\t\t4 character limit is lifted!!")
+	print("\n\t\tyou can now type in a max of 15 chars for name,\n\t\t\tbut display is limited to 4 :P")
 
 	while(True):
 		arg = input("Enter command\n> ")
