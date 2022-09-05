@@ -65,10 +65,11 @@ def display_leaderboard():
 	ws = '  '
 	for entry in sorted(lb.items(), key=get_wpm, reverse=True):
 		name = entry[0]
-		if len(name) < 6:
-			name += "_" * (6 - len(name))
-		elif len(name) > 6:
-			name = name[:6]
+		if len(name) < 7:
+			name += " " * (7 - len(name))
+		elif len(name) > 7:
+			name = name[:4]
+			name += "..."
 		wpm = float(entry[1]['wpm'])
 		raw = float(entry[1]['raw'])
 		acc = float(entry[1]['acc'])
