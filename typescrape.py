@@ -87,6 +87,7 @@ def show_help():
 def main():
 	print(f"\n\n\n\n-- Janky Monkeytype Terminal Leaderboard [JMTL] --\n - type 'player PLAYER_NAME' to save your score!\n\n\t\t\t{' '*5}--- UPDATE!!!! ---\n\t\t\t4 character limit is lifted!!")
 	print("\n\t\tyou can now type in a max of 15 chars for name,\n\t\t\tbut display is limited to 4 :P")
+	print("\n\n\t\tenter 'show lb' to show leaderboard!")
 
 	while(True):
 		arg = input("Enter command\n> ")
